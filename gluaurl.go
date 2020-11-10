@@ -1,22 +1,26 @@
 package gluaurl
 
-import "github.com/yuin/gopher-lua"
-import "net/url"
-import "strings"
-import "fmt"
-import "sort"
-import "regexp"
+import (
+	"fmt"
+	"net/url"
+	"regexp"
+	"sort"
+	"strings"
+
+	lua "github.com/yuin/gopher-lua"
+)
 
 var rBracket = regexp.MustCompile("\\[\\]$")
 
 func Loader(L *lua.LState) int {
-	mod := L.SetFuncs(L.NewTable(), map[string]lua.LGFunction{
+	t := L.NewTable()
+	L.SetFuncs(t, map[string]lua.LGFunction{
 		"parse":              parse,
 		"build":              build,
 		"build_query_string": buildQueryString,
 		"resolve":            resolve,
 	})
-	L.Push(mod)
+	L.Push(t)
 	return 1
 }
 
